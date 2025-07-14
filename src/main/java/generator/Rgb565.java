@@ -11,7 +11,13 @@ import javax.imageio.ImageIO;
 public class Rgb565 {
 
 	public static void main(String[] args) throws IOException {
+		convert("discord.bmp");
+		convert("eclipse.bmp");
+		convert("firefox.bmp");
+		convert("homer.bmp");
 		convert("mimic.bmp");
+		convert("terminal.bmp");
+		convert("vscode.bmp");
 		convert("wifi.bmp");
 	}
 
