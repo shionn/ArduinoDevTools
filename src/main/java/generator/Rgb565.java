@@ -4,26 +4,37 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.FilenameFilter;
 import java.io.IOException;
+import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
 public class Rgb565 {
 
 	public static void main(String[] args) throws IOException {
-		convert("discord.bmp");
-		convert("eclipse.bmp");
-		convert("firefox.bmp");
-		convert("homer.bmp");
-		convert("mimic.bmp");
-		convert("terminal.bmp");
-		convert("vscode.bmp");
-		convert("wifi.bmp");
+		new Rgb565().convertAll();
 	}
 
-	private static void convert(String filename) throws IOException {
-		BufferedImage bufferedImage = ImageIO.read(new File(filename));
-		try (FileWriter fw = new FileWriter(filename.split("\\.")[0] + ".h");
+	private void convertAll() {
+		Arrays.stream(new File("bmp").list(new FilenameFilter() {
+			@Override
+			public boolean accept(File dir, String name) {
+				return name.endsWith(".bmp");
+			}
+		})).forEach(t -> {
+			try {
+				convert("bmp", t);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
+
+	}
+
+	private void convert(String folder, String filename) throws IOException {
+		BufferedImage bufferedImage = ImageIO.read(new File("bmp/" + filename));
+		try (FileWriter fw = new FileWriter("h/" + filename.split("\\.")[0] + ".h");
 				BufferedWriter bf = new BufferedWriter(fw)) {
 			bf.write("#include <Arduino.h>");
 			bf.newLine();
@@ -51,7 +62,7 @@ public class Rgb565 {
 		}
 	}
 
-	public static int rgbToRgb565(int rgb) {
+	private int rgbToRgb565(int rgb) {
 		// Extract the red, green, and blue components
 		int r = (rgb >> 16) & 0xFF; // Red component
 		int g = (rgb >> 8) & 0xFF; // Green component
