@@ -12,6 +12,7 @@ public class Rgb565 {
 
 	public static void main(String[] args) throws IOException {
 		convert("mimic.bmp");
+		convert("wifi.bmp");
 	}
 
 	private static void convert(String filename) throws IOException {
