@@ -33,13 +33,19 @@ public class Rgb565 {
 	}
 
 	private void convert(String folder, String filename) throws IOException {
+		String name = filename.split("\\.")[0];
 		BufferedImage bufferedImage = ImageIO.read(new File("bmp/" + filename));
-		try (FileWriter fw = new FileWriter("h/" + filename.split("\\.")[0] + ".h");
+		try (FileWriter fw = new FileWriter("h/" + name + ".h");
 				BufferedWriter bf = new BufferedWriter(fw)) {
 			bf.write("#include <Arduino.h>");
 			bf.newLine();
 			bf.newLine();
-			bf.write("static uint16_t PROGMEM " + filename.split("\\.")[0] + "[] = { ");
+			bf.write("#ifndef __" + name.toUpperCase() + "_H__");
+			bf.newLine();
+			bf.write("#define __" + name.toUpperCase() + "_H__");
+			bf.newLine();
+			bf.newLine();
+			bf.write("static const uint16_t " + name + "[] PROGMEM = { ");
 			bf.newLine();
 			bf
 					.write(Integer.toString(bufferedImage.getWidth()) + ", "
@@ -58,6 +64,9 @@ public class Rgb565 {
 				}
 			}
 			bf.write("};");
+			bf.newLine();
+			bf.newLine();
+			bf.write("#endif");
 			bf.newLine();
 		}
 	}
